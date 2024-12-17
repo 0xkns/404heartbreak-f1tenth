@@ -24,10 +24,10 @@ Bayesian filtering is a probabilistic method used to estimate the state of a dyn
 
 **This is rather complex, so it was skipped.**
 
-## Levine Opitimisations 
+## Levine Opitimisation
 
 The Levine Method in autonomous racing refers to a strategy that optimizes the vehicle's trajectory for minimum lap time while considering vehicle dynamics constraints. This method uses a blend of optimal control theory and nonlinear optimization to compute the racing line (trajectory) that balances speed, safety, and physical limits. Levin uses the **Cost System** method which could be good but is rather jaggery and uneven, as it can have various fluctuations. 
 
-## Wall Tracing
+## Wall Tracing Method
 
 Wall following is a method used in robotics and autonomous vehicles to navigate by staying a consistent distance from a wall or obstacle. The robot or vehicle uses sensors, such as LiDAR, ultrasonic, or infrared sensors, to detect the position of the wall and adjust its movement to follow it.
