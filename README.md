@@ -57,7 +57,7 @@ $$\
 $$\
 \text{speed} =
 \begin{cases} 
-v_{\text{turn}} & \text{if } |\text{steeringAngle}| > \text{turnThreshold} \\
+v_{\text{turn}} & \text{if } |\text{steering angle}| > \text{turn threshold} \\
 v_{\text{default}} & \text{otherwise}
 \end{cases}
 \$$
