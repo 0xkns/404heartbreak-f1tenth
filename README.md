@@ -1,16 +1,18 @@
 # 404s & Heartbreak F1 Tenth
 
 # Team Details
-1. Shanthakumar Karan 
-2. Harsh Vivekanand Pandey
+1. Shanthakumar Karan
+2. Harsh Vivekanand Pandey 
+
+## Map
+
+**BrandsHatch**
+
+<img src="https://github.com/user-attachments/assets/0d2c4483-5ae6-4045-856b-03b93679f573" alt="BrandsHatch Map" width="500" height="500">
 
 ## Algorithm
 
-The algorithm our team is using is **Wall Tracing** algorithm 
-
-### Explanation 
-
-This code implements a wall-following algorithm using ROS2. The key task is to steer the vehicle to maintain a fixed distance from the wall while navigating curves. The control relies on **PID (Proportional-Integral-Derivative)** logic.
+We have implemented a wall-following algorithm using ROS2 for the BrandsHatch map. In the wall follow algorithm the key task is to steer the vehicle to maintain a fixed distance from the wall while navigating curves. The control is maintained and corrected using the **PID (Proportional-Integral-Derivative)** logic.
 
 **The code layout is in form of:**
 
@@ -21,13 +23,36 @@ This code implements a wall-following algorithm using ROS2. The key task is to s
 
 ### Equations used within the Code
 
-**Angle of Deviation** 
+1. **Angle of Deviation** 
 
 $$\
 \alpha = \arctan\left(\frac{a \cdot \cos(\theta) - b}{a \cdot \sin(\theta)}\right)
 \$$
  
-**Dynamic Speed Control**
+2. **Distance to the WALL**
+
+$$\
+\text{distance} = b \cdot \cos(\alpha)
+\$$
+
+3. **PID Control**
+
+
+$$\
+\text{steeringAngle} = k_p \cdot \text{error} + k_d \cdot (\text{error} - \text{prevError}) + k_i \cdot \text{accumulatedError}
+\$$
+
+4. **Error Calculation**
+
+$$\
+\text{error} = \text{desired distance} - \text{actual distance} + \text{lookahead distance} * \sin(\alpha)
+\$$
+
+$$\
+ \text{lookahead distance} = \text{base lookahead} + \text{longitudinal velocity} * \text{lookahead gain}
+\$$
+
+5.  **Dynamic Speed Control**
 
 $$\
 \text{speed} =
@@ -35,22 +60,4 @@ $$\
 v_{\text{turn}} & \text{if } |\text{steeringAngle}| > \text{turnThreshold} \\
 v_{\text{default}} & \text{otherwise}
 \end{cases}
-\$$
-
-**PID Control**
-
-$$\
-\text{steeringAngle} = k_p \cdot \text{error} + k_d \cdot (\text{error} - \text{prevError}) + k_i \cdot \text{accumulatedError}
-\$$
-
-**Error Calculation**
-
-$$\
-\text{error} = \text{setpoint} - \text{distance}
-\$$
-
-**Distance to the WALL**
-
-$$\
-\text{distance} = b \cdot \cos(\alpha)
 \$$
