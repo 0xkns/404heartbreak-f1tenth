@@ -1,4 +1,4 @@
-# Various algorithms implemented for autonomous navigation.
+# Various algorithms for autonomous navigation.
 
 ## 1. Wall Follow
 
