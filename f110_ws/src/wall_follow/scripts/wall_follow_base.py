@@ -1,5 +1,3 @@
-Submission v4
-
 import math
 import time
 import rclpy
