@@ -1,11 +1,11 @@
 import time
-
-import numpy as np
 import rclpy
-from ackermann_msgs.msg import AckermannDriveStamped
-from nav_msgs.msg import Odometry
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
+from nav_msgs.msg import Odometry
+from ackermann_msgs.msg import AckermannDriveStamped
+
+import numpy as np
 
 
 class WallFollow(Node):
@@ -13,14 +13,24 @@ class WallFollow(Node):
     def __init__(self):
         super().__init__("wall_follow")
         self.sub_scan = self.create_subscription(
-            LaserScan, "/scan", self.scan_callback, 1
+            LaserScan, 
+            "/scan", 
+            self.scan_callback, 
+            1
         )
 
         self.sub_odom = self.create_subscription(
-            Odometry, "/ego_racecar/odom", self.odom_callback, 1
+            Odometry, 
+            "/ego_racecar/odom", 
+            self.odom_callback, 
+            1
         )
 
-        self.pub_drive = self.create_publisher(AckermannDriveStamped, "/drive", 10)
+        self.pub_drive = self.create_publisher(
+            AckermannDriveStamped, 
+            "/drive", 
+            10
+        )
 
         self.drive_msg = AckermannDriveStamped()
 
@@ -55,8 +65,10 @@ class WallFollow(Node):
         angle_a = 40
 
         theta = (angle_b - angle_a) * (np.pi / 180)
-        distance_b = self.getRange(scan_data, angle_b)
-        distance_a = self.getRange(scan_data, angle_a)
+        distance_b = self.getRange(scan_data, angle_b)  
+        distance_a = (
+            self.getRange(scan_data, angle_a)
+        ) 
 
         alpha = -1 * np.arctan2(
             (distance_a * np.cos(theta) - distance_b), (distance_a * np.sin(theta))
@@ -86,7 +98,9 @@ class WallFollow(Node):
             self.integral += error_1 * dt
 
             steering_angle = (
-                (self.Kp * error_1) + (self.Ki * self.integral) + (self.Kd * derivative)
+                (self.Kp * error_1)
+                + (self.Ki * self.integral)
+                + (self.Kd * derivative)
             )
 
             if steering_angle < -0.4:
@@ -106,10 +120,10 @@ class WallFollow(Node):
 
             if time.time() - self.start_time < 60:
                 self.get_logger().info(
-                    f"steering_angle: {steering_angle_degrees:.2f} | speed: {self.longitudinal_vel:.2f}"
+                    f"steering_angle: {steering_angle:.2f} | speed: {self.longitudinal_vel:.2f}"
                 )
             self.pub_drive.publish(self.drive_msg)
-
+            
         except ZeroDivisionError:
             pass
 
@@ -117,10 +131,10 @@ class WallFollow(Node):
 def main(args=None):
     rclpy.init(args=args)
     wall_follow = WallFollow()
-    try:
+    try:    
         rclpy.spin(wall_follow)
     except KeyboardInterrupt:
-        wall_follow.get_logger().info("Shutting down gracefully...")
+        wall_follow.get_logger().info('Shutting down gracefully...')
     finally:
         # wall_follow.stop_car()
         wall_follow.destroy_node()
