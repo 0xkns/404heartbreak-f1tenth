@@ -1,15 +1,12 @@
-#!/usr/bin/env python
 
 import rospy
 import math
 from sensor_msgs.msg import LaserScan
 from race.msg import pid_input
 import numpy as np
-
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 angle_range = 180
-# angle_range = np.pi
 car_length = 1.5
 
 desired_trajectory = 0
@@ -37,8 +34,6 @@ pub = rospy.Publisher('error', pid_input, queue_size=10)
 def getRange(data, angle):
     if angle > 179.9:
         angle = 179.9
-    # if angle > np.pi-1e-4:
-    # angle = np.pi-1e-4
     index = len(data.ranges) * angle / angle_range
     dist = data.ranges[int(index)]
     if math.isinf(dist) or math.isnan(dist):
@@ -54,10 +49,8 @@ def obs_particles(data, start, end, distance):
     alpha_degree = int(math.degrees(alpha))
     k = -1
     for i in range(start - alpha_degree, end - alpha_degree):
-        # for i in range(start - alpha, end - alpha):
         k = k + 1
         front_values.append(getRange(data, i) * math.sin(math.radians(i + alpha_degree)))
-        # front_values.append(getRange(data,i)*math.sin(i+alpha))
         if front_values[k] <= distance:
             num_points = num_points + 1
     return front_values, num_points
@@ -67,14 +60,10 @@ def obs_decide(data):
     global alpha
     start = 84
     end = 96
-    # start = 84*np.pi/180
-    # end = 96*np.pi/180
     distance = 2.0
     values, num_points = obs_particles(data, start, end, distance)
-    # print "In range", values
     start_point = 0
     end_point = 0
-    # Detects if its a clear path
     print
     "Num Points", num_points
 
@@ -82,7 +71,6 @@ def obs_decide(data):
         print
         "Go go go - clear path"
         return -1, -1
-    # Detects if there is an obstacle
     elif num_points <= 15:
         print
         "normal obstacle"
@@ -98,7 +86,6 @@ def obs_decide(data):
             if i <= (distance):
                 end_point = end - k
                 break
-        # if the obstacle covers the previous any one of previous limits, expand the range
         if start_point <= (start + 1):
             print
             "Start point extended"
@@ -138,7 +125,6 @@ def obs_decide(data):
     else:
         print
         "wide obstacle"
-        # Looks like a wide obstacle or wall. Start from expanded range
         start1 = start - 10
         end1 = start - 1
         start_point = end1 + 3
@@ -163,7 +149,6 @@ def obs_decide(data):
                 end_point = end2 - k
                 break
 
-        # Looks like a wall if following conditions satisfy
         print
         "wall"
         if start_point <= start1 + 1:
@@ -211,15 +196,7 @@ def decide_obstacle_direction(data, start_point, end_point):
 
         obstacle_distance_left = 0.0
         obstacle_distance_right = 0.0
-
-        # if (start_point-alpha_degree) > 90:
-        # 	obstacle_distance_right = car_dist_right + start_pointdistance
-        # else:
         obstacle_distance_right = car_dist_right - start_pointdistance
-
-        # if (end_point-alpha_degree) > 90:
-        # 	obstacle_distance_left = car_dist_left - end_pointdistance
-        # else:
         obstacle_distance_left = car_dist_left + end_pointdistance
 
         print
@@ -335,7 +312,6 @@ def followCentre(data, desired_trajectory):
     "dist 1 : ", future_dist1
     print
     "dist 2 : ", future_dist2
-    # print "dist : ",future_dist
     error = future_dist1 - future_dist2
     print
     "Error : ", error
@@ -364,48 +340,11 @@ def callback(data):
     global final_direction
     global prev_direction
     global flag_left
-    #	a = getRange(data,50)
-    #	b = getRange(data,0)
-    #	# c = getRange(data,40)
-    #	swing = math.radians(50)
-    #	alpha = math.atan((a*math.cos(swing)-b)/(a*math.sin(swing)))
-    #	if flag_obstacle == 0:
+   
     start_point, end_point = obs_decide(data)
-    #	else:
-    #		start_point = -1
-    #		end_point = -1
 
     final_desired_trajectory, direction = decide_obstacle_direction(data, start_point, end_point)
-    #	if desired_trajectory!=1.0:
-    #		flag_obstacle = 1
-    # if direction == 0:
-    # 	flag_left = 1
-    # elif direction == 2:
-    # 	flag_left = 0
-
-    # if flag_left == 1:
-    # 	direction = 0
-
-    # if direction == 0:
-    # 	final_desired_trajectory = 0.4
-    # 	final_direction = direction
-    # elif desired_trajectory != -1:
-    # 	final_desired_trajectory = desired_trajectory
-    # 	final_direction = direction
-
-    # car_dist_right = getRange(data,0)*math.cos(alpha)
-    # car_dist_left = getRange(data,179)*math.cos(alpha)
-
-    # if decideReturn(start_point,end_point) == 1:# and (car_dist_left + car_dist_right) > 1.0:
-    # 	print "reset done"
-    # 	final_desired_trajectory = 0.8
-    # 	final_direction = 1
-    # 	#flag_obstacle = 0
-    # #final_direction= 0
-    # #final_desired_trajectory = 1
-    # print "Final Desired",final_desired_trajectory
-    # print "new code"
-    # if final_direction == 0:
+    
     error_right, curr_dist_right = followRight(data, 2.)
     error_left, curr_dist_left = followLeft(data, 1.)
     error_center, curr_dist_center = followCentre(data, 1.)
@@ -416,14 +355,11 @@ def callback(data):
         print
         'Error', error
     else:
-        # error = followRight(data,final_desired_trajectory)
         error = error_right
         print
         'Following Right'
         print
         'Error', error
-
-    # if curr_dist_center:
 
     print
     'Is error same?', error
