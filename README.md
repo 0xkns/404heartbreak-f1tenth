@@ -4,7 +4,7 @@
 1. Shanthakumar Karan
 2. Harsh Vivekanand Pandey 
 
-## Map
+## Race Map
 
 **BrandsHatch**
 
@@ -39,7 +39,7 @@ $$\
 
 
 $$\
-\text{steeringAngle} = k_p \cdot \text{error} + k_d \cdot (\text{error} - \text{prevError}) + k_i \cdot \text{accumulatedError}
+\text{steering angle} = k_p \cdot \text{error} + k_d \cdot (\text{error} - \text{prev error}) + k_i \cdot \text{accumulated error}
 \$$
 
 4. **Error Calculation**
