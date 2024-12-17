@@ -2,7 +2,7 @@
 This is a ROS2 package that contains the evaluation scripts needed for the F1Tenth Hackathon
 
 ## Notes
-- **For evaluating your algorithms, please remember to replace `wall_follower` in the launch file with your algorithm.**
+- **For evaluating your algorithms, please remember to replace `wall_follower` in the launch file with the required algorithm.**
 - **The evaluation script will only run for 10 minutes and will print the final results and kill the node.**
 - **Make sure the f1tenth simulator is running before launching the nodes**
 - **To visualise the lap_marker, in RViz click "Add" > click on the "By topic" tab > click on the topic "`/lap_marker`" > click "Ok"**
