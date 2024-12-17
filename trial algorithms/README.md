@@ -27,6 +27,10 @@ i. Iteratively adjust the racing line using the refined estimates to minimize th
 
 i. Apply the optimized racing line to control algorithms for real-time implementation on the autonomous vehicle.
 
-This is rather complex, so it was skipped. 
+**This is rather complex, so it was skipped.**
 
-## 
+## Levine Opitimisations 
+
+The Levine Method in autonomous racing refers to a strategy that optimizes the vehicle's trajectory for minimum lap time while considering vehicle dynamics constraints. This method uses a blend of optimal control theory and nonlinear optimization to compute the racing line (trajectory) that balances speed, safety, and physical limits. Levin uses the **Cost System** method which could be good but is rather jaggery and uneven, as it can have various fluctuations. 
+
+## Wall Tracing
